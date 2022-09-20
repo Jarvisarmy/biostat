@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 from collections import Counter
 import json
+import os
 
 def cut(lst, lenth, overlap):
     ret=[]
@@ -95,6 +96,9 @@ def get_test_dict(train_dict, eg5_test, eg7_test1, eg7_test2):
     return eg5_dict, eg7_dict1, eg7_dict2
 
 def save_cipin(eg5_dict, eg7_dict1,eg7_dict2,lenth,overlap,train_dict):
+    if not os.path.exists('result'):
+        os.mkdir('result')
+    '''
     with open('result/dict_%s_%s.txt'%(lenth,overlap), 'w', encoding="utf-8")as f, open('result/train_dict_%s_%s.txt'%(lenth,overlap), 'w', encoding="utf-8")as f1:
         leng1 = abs(len(eg7_dict2)-len(eg5_dict))
         leng2 = abs(len(eg7_dict2)-len(eg7_dict1))
@@ -103,6 +107,15 @@ def save_cipin(eg5_dict, eg7_dict1,eg7_dict2,lenth,overlap,train_dict):
         summ = sum(train_dict.values())
         for eg7_1, eg5, eg7_2 in zip(eg7_dict1,eg5_dict,eg7_dict2):
             f.write(json.dumps(summ) + '\n' + 'EG7_1:\t' + json.dumps(eg7_1) + '\t' + 'EG7_2:\t' + json.dumps(eg7_2) + '\t' + 'EG5:\t' + json.dumps(eg5) + '\n')
+   '''
+    with open('result/dict5_%s_%s.txt'%(lenth,overlap), 'w', encoding="utf-8")as f:
+        f.write(json.dumps(eg5_dict))
+        f.close()
+    with open('result/dict7_%s_%s.txt'%(lenth,overlap), 'w', encoding="utf-8")as f:
+        f.write(json.dumps(eg7_dict1))
+        f.close()
+        
+    with open('result/train_dict_%s_%s.txt'%(lenth,overlap), 'w', encoding="utf-8")as f1:
         f1.write(json.dumps(train_dict)+'\n')
 
 if __name__=="__main__":
