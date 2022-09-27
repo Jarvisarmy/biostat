@@ -14,26 +14,32 @@ def cut(lst, lenth, overlap):
                 ret.append(this_append)
     return ret
 
-def get_train_dict(train_path, lenth, overlap):
+def get_train_dict(train_path_list, lenth, overlap):
     all_train = []
-    for ll, line in enumerate(open(train_path, 'r', encoding="utf-8")):
-        if (ll+1)%100==0:
-            print(ll)
-        linee = line.strip()
-        if 'X' in linee:
-            continue
-        elif 'U' in linee:
-            continue
-        elif 'Z' in linee:
-            continue
-        elif 'B' in linee:
-            continue
-        elif 'O' in linee:
-            continue
-        words = cut(linee, lenth, overlap)
-        for i in words:
-            ii = ''.join(i)
-            all_train.append(ii)
+    total = 0
+    for train_path in train_path_list:
+        total_path = 0
+        for ll, line in enumerate(open(train_path, 'r')):#, encoding="utf-8")):
+            total_path = ll
+            #if (ll+1)%100==0:
+            #    print(ll)
+            linee = line.strip()
+            if 'X' in linee:
+                continue
+            elif 'U' in linee:
+                continue
+            elif 'Z' in linee:
+                continue
+            elif 'B' in linee:
+                continue
+            elif 'O' in linee:
+                continue
+            words = cut(linee, lenth, overlap)
+            for i in words:
+                ii = ''.join(i)
+                all_train.append(ii)
+        total += total_path
+        print("the number of lines processed: ",total)
     result = Counter(all_train)
     train_dict = dict(result)
     return train_dict
@@ -42,7 +48,7 @@ def get_test(test_path, lenth, overlap):
     eg5_test = []
     eg7_test1 = []
     eg7_test2 = []
-    for l, x in enumerate(open(test_path,'r',encoding="utf-8")):
+    for l, x in enumerate(open(test_path,'r')):#,encoding="utf-8")):
         x = x.strip()
         xx = [lst for lst in x]
         post = [str(l) for l in range(1,len(xx)+1)]
@@ -126,7 +132,35 @@ if __name__=="__main__":
     overlap = input("overlap:")
     overlap = int(overlap)
     
-    train_dict = get_train_dict(train_path, lenth, overlap)
+    train_path_list = [
+        "data/SwissProt.txt",
+        "data/TrEMBL_Athailana.txt",
+        "data/TrEMBL_BarbusGrahami.txt",
+        "data/TrEMBL_Bovine.txt",
+        "data/TrEMBL_BrownTrout.txt",
+        "data/TrEMBL_Carp.txt",
+        "data/TrEMBL_CohoSalmon.txt",
+        "data/TrEMBL_EpeiraVentricosa.txt",
+        "data/TrEMBL_FruitFly.txt",
+        "data/TrEMBL_Goatgrass.txt",
+        "data/TrEMBL_Grape.txt",
+        "data/TrEMBL_Human.txt",
+        "data/TrEMBL_Kapabacteria.txt",
+        "data/TrEMBL_Mouse.txt",
+        "data/TrEMBL_part1.txt",
+        "data/TrEMBL_part2.txt",
+        "data/TrEMBL_part3.txt",
+        "data/TrEMBL_part4.txt",
+        "data/TrEMBL_Rat.txt",
+        "data/TrEMBL_Rice.txt",
+        "data/TrEMBL_TrifoliumMedium.txt",
+        "data/TrEMBL_TriticumDurum.txt",
+        "data/TrEMBL_Trout.txt",
+        "data/TrEMBL_Wheat.txt",
+        "data/TrEMBL_Zebrafish.txt"
+    ]
+    
+    train_dict = get_train_dict(train_path_list, lenth, overlap)
     
     eg5_test, eg7_test1, eg7_test2 = get_test(test_path, lenth, overlap)
     eg5_dict, eg7_dict1, eg7_dict2 = get_test_dict(train_dict, eg5_test, eg7_test1, eg7_test2)
